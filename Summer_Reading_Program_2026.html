@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Summer Reading Program 2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Source+Sans+3:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Source Sans 3',system-ui,sans-serif;background:#f8f6f1;color:#2c2c2a;min-height:100vh}
+
+.page-header{background:#fff;border-bottom:1px solid #e5e2db;padding:2rem 0 0;text-align:center}
+.page-header h1{font-family:'DM Serif Display',serif;font-size:2rem;color:#2c2c2a;font-weight:400;letter-spacing:-0.5px}
+.page-header p{font-size:0.95rem;color:#888780;margin-top:0.3rem}
+
+.grade-tabs{display:flex;justify-content:center;gap:0;margin-top:1.5rem}
+.gtab{font-size:0.9rem;font-weight:500;padding:0.7rem 1.8rem;background:transparent;border:none;border-bottom:3px solid transparent;color:#888780;cursor:pointer;transition:all 0.15s}
+.gtab:hover{color:#2c2c2a;background:#f8f6f1}
+.gtab.active{color:#1D9E75;border-bottom-color:#1D9E75}
+
+.container{max-width:1100px;margin:0 auto;padding:1.5rem 1.5rem 3rem}
+
+.principal-section{background:#fff;border:1px solid #FAC775;border-radius:12px;padding:1.5rem;margin-bottom:1.5rem}
+.principal-header{display:flex;align-items:center;gap:10px;margin-bottom:1rem}
+.principal-header i{font-size:22px;color:#BA7517}
+.principal-header h2{font-family:'DM Serif Display',serif;font-size:1.2rem;font-weight:400;color:#633806}
+.principal-header span{font-size:0.8rem;color:#854F0B;margin-left:auto;background:#FAEEDA;padding:4px 12px;border-radius:20px}
+.pp-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:12px}
+.pp-card{background:#fffcf5;border:1px solid #FAC775;border-radius:10px;padding:1rem;cursor:pointer;transition:all 0.15s;position:relative}
+.pp-card:hover{border-color:#BA7517;transform:translateY(-1px)}
+.pp-card.picked{border:2px solid #BA7517;background:#FFF3DB}
+.pp-card .card-title{font-weight:600;font-size:0.9rem;color:#412402;line-height:1.35}
+.pp-card .card-author{font-size:0.8rem;color:#854F0B;margin-top:3px}
+.pp-card .card-summary{font-size:0.82rem;color:#633806;line-height:1.5;margin-top:8px}
+.pp-card .pick-check{display:none}
+.pp-card.picked .pick-check{display:flex;align-items:center;gap:4px;font-size:0.78rem;font-weight:600;color:#BA7517;margin-top:8px}
+
+.controls-bar{display:flex;gap:8px;margin-bottom:1.25rem;flex-wrap:wrap;align-items:center}
+.search-box{position:relative;flex:1;min-width:200px}
+.search-box i{position:absolute;left:12px;top:50%;transform:translateY(-50%);font-size:16px;color:#b4b2a9}
+.search-box input{width:100%;padding:10px 14px 10px 38px;border:1px solid #d3d1c7;border-radius:8px;font-size:0.9rem;font-family:inherit;background:#fff;transition:border-color 0.15s}
+.search-box input:focus{outline:none;border-color:#1D9E75}
+.filter-pill{font-size:0.82rem;font-weight:500;padding:7px 14px;border-radius:20px;border:1px solid #d3d1c7;background:#fff;color:#5f5e5a;cursor:pointer;transition:all 0.12s;white-space:nowrap}
+.filter-pill:hover{border-color:#888780}
+.filter-pill.active{background:#1D9E75;color:#fff;border-color:#1D9E75}
+.book-count{font-size:0.82rem;color:#888780;margin-left:auto;white-space:nowrap}
+
+.book-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px}
+.book-card{background:#fff;border:1px solid #e5e2db;border-radius:10px;padding:1.1rem 1.2rem;cursor:pointer;transition:all 0.15s;display:flex;flex-direction:column;gap:4px}
+.book-card:hover{border-color:#b4b2a9;transform:translateY(-1px)}
+.book-card.picked{border:2px solid #1D9E75;background:#f0faf5}
+.card-title{font-weight:600;font-size:0.92rem;color:#2c2c2a;line-height:1.35}
+.card-author{font-size:0.82rem;color:#888780}
+.genre-tag{display:inline-block;font-size:0.72rem;font-weight:600;padding:3px 10px;border-radius:20px;margin-top:5px;width:fit-content;text-transform:uppercase;letter-spacing:0.5px}
+.card-summary{font-size:0.84rem;color:#5f5e5a;line-height:1.55;margin-top:8px}
+.pick-check{display:none}
+.book-card.picked .pick-check{display:flex;align-items:center;gap:4px;font-size:0.78rem;font-weight:600;color:#1D9E75;margin-top:auto;padding-top:8px}
+
+.genre-adventure .genre-tag{background:#E1F5EE;color:#085041}
+.genre-fantasy .genre-tag{background:#EEEDFE;color:#3C3489}
+.genre-animals .genre-tag{background:#FAEEDA;color:#633806}
+.genre-history .genre-tag{background:#E6F1FB;color:#0C447C}
+.genre-funny .genre-tag{background:#FBEAF0;color:#72243E}
+.genre-classic .genre-tag{background:#F1EFE8;color:#444441}
+.genre-nature .genre-tag{background:#EAF3DE;color:#27500A}
+.genre-family .genre-tag{background:#FAECE7;color:#712B13}
+.genre-science .genre-tag{background:#E6F1FB;color:#0C447C}
+.genre-pp .genre-tag{background:#FAEEDA;color:#633806}
+
+.picks-footer{position:fixed;bottom:0;left:0;right:0;background:#fff;border-top:1px solid #e5e2db;padding:14px 24px;display:none;align-items:center;gap:14px;z-index:100}
+.picks-footer.show{display:flex}
+.picks-footer i{font-size:20px;color:#1D9E75}
+.picks-footer .picks-text{font-size:0.9rem;color:#5f5e5a}
+.picks-footer .picks-text strong{color:#2c2c2a}
+.picks-footer .picks-names{flex:1;font-size:0.8rem;color:#888780;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.print-btn{font-size:0.85rem;font-weight:500;padding:8px 20px;background:#1D9E75;color:#fff;border:none;border-radius:8px;cursor:pointer;transition:background 0.15s}
+.print-btn:hover{background:#0F6E56}
+
+.empty-state{text-align:center;padding:3rem 1rem;color:#888780}
+.empty-state i{font-size:40px;display:block;margin-bottom:12px;color:#d3d1c7}
+.empty-state p{font-size:0.95rem}
+
+@media print{
+.page-header,.controls-bar,.picks-footer,.grade-tabs{display:none!important}
+.container{padding:0.5rem}
+body{background:#fff}
+.book-card,.pp-card{break-inside:avoid;border:1px solid #ccc!important;transform:none!important}
+.book-card.picked,.pp-card.picked{border:2px solid #1D9E75!important}
+.principal-section{break-inside:avoid}
+}
+
+@media(max-width:600px){
+.page-header h1{font-size:1.5rem}
+.gtab{padding:0.6rem 1rem;font-size:0.82rem}
+.book-grid{grid-template-columns:1fr}
+.pp-grid{grid-template-columns:1fr}
+.container{padding:1rem}
+}
+</style>
+</head>
+<body>
+
+<div class="page-header">
+  <h1><i class="ti ti-book" style="font-size:28px;vertical-align:-4px;margin-right:8px;color:#1D9E75"></i>Summer Reading Program 2026</h1>
+  <p>Choose your grade, explore the books, and pick your favorites!</p>
+  <div class="grade-tabs" id="grade-tabs">
+    <button class="gtab active" onclick="setGrade('prek')">Pre-K &amp; Kindergarten</button>
+    <button class="gtab" onclick="setGrade('1st2nd')">1st &amp; 2nd Grade</button>
+    <button class="gtab" onclick="setGrade('3rd5th')">3rd, 4th &amp; 5th Grade</button>
+  </div>
+</div>
+
+<div class="container">
+  <div class="principal-section" id="principal-section">
+    <div class="principal-header">
+      <i class="ti ti-star" aria-hidden="true"></i>
+      <h2>Principal's picks</h2>
+      <span>Specially chosen for you!</span>
+    </div>
+    <div class="pp-grid" id="pp-grid"></div>
+  </div>
+
+  <div class="controls-bar">
+    <div class="search-box">
+      <i class="ti ti-search" aria-hidden="true"></i>
+      <input type="text" id="search" placeholder="Search titles or authors..." oninput="render()">
+    </div>
+    <div id="filter-pills"></div>
+    <span class="book-count" id="book-count"></span>
+  </div>
+
+  <div class="book-grid" id="book-grid"></div>
+  <div class="empty-state" id="empty-state" style="display:none">
+    <i class="ti ti-book-off"></i>
+    <p>No books match your search. Try a different keyword!</p>
+  </div>
+</div>
+
+<div class="picks-footer" id="picks-footer">
+  <i class="ti ti-check" aria-hidden="true"></i>
+  <span class="picks-text"><strong id="pick-count">0</strong> books picked</span>
+  <span class="picks-names" id="pick-names"></span>
+  <button class="print-btn" onclick="printPicks()"><i class="ti ti-printer" style="font-size:14px;vertical-align:-1px;margin-right:4px"></i>Print my picks</button>
+</div>
+
+<script>
+const DATA={
+prek:[
+{t:"Mercy Watson",a:"Kate DiCamillo",g:"funny",s:"A hilarious series about an adventure-loving pig who lives with the Watsons and will do just about anything for hot toast with butter.",pp:true},
+{t:"Sleepy Songbird",a:"Suzanne Barton",g:"animals",s:"A little bird doesn't want to fly south with the others — she's having too much fun! A cozy story about finding your way home."},
+{t:"Deep in the Wood",a:"Christopher Carr",g:"nature",s:"A beautiful look at the secret world hidden deep in the forest — the animals, the quiet, and the wonder of it all."},
+{t:"Plenty of Love to Go Around",a:"Emma Chichester Clark",g:"family",s:"When a new baby arrives, a loyal dog worries there won't be enough love left. A warm story about big families and bigger hearts."},
+{t:"Goldilocks and the 3 Dinosaurs",a:"Mo Willems",g:"funny",s:"Mo Willems turns the fairy tale upside down — this time with dinosaurs and a very suspicious plot. Laugh-out-loud silly.",pp:true},
+{t:"A Perfect Day",a:"Lane Smith",g:"animals",s:"Different animals enjoy a perfect day in the garden in their own special ways — until a surprise visitor shakes things up."},
+{t:"Mr. McGinty's Monarchs",a:"Linda Vander Heyden",g:"nature",s:"A true-hearted story about a kind man who helps monarch butterflies on their amazing journey south."},
+{t:"Miss Rumphius",a:"Barbara Cooney",g:"adventure",s:"Alice Rumphius travels the world and makes it more beautiful by scattering flower seeds everywhere she goes — a story about leaving the world better than you found it.",pp:true},
+{t:"Roxaboxen",a:"Barbara Cooney",g:"adventure",s:"Children build an entire imaginary town out of rocks and desert scraps — a celebration of childhood creativity and play."},
+{t:"Evergreen",a:"Matthew Cordell",g:"adventure",s:"A brave girl ventures into a wild winter forest to find something important — a wordless picture book full of wonder and courage."},
+{t:"Sam and Dave Dig a Hole",a:"Mac Barnett",g:"funny",s:"Sam and Dave dig a hole looking for something spectacular. They keep just barely missing treasure — but the reader can see it all."},
+{t:"The Curious Garden",a:"Peter Brown",g:"nature",s:"A boy discovers a struggling little garden on an abandoned railway and slowly brings an entire gray city back to life with green."},
+{t:"A House for Mouse",a:"Gabby Dawnay",g:"animals",s:"Mouse needs a home and tries all sorts of places — a shoe, a clock, a hat — before finding just the right spot."},
+{t:"The Dreamer",a:"Il Sung Na",g:"animals",s:"A dreamy pig imagines all the wonderful things he could be — from a penguin to a whale — in this gorgeously illustrated bedtime book."},
+{t:"Joan Procter, Dragon Doctor",a:"Patricia Valdez",g:"science",s:"The true story of a girl who loved reptiles and grew up to become a famous zoologist who cared for Komodo dragons at the London Zoo.",pp:true},
+{t:"Frog and Toad",a:"Arnold Lobel",g:"funny",s:"The best of friends — cheerful Frog and grumpy Toad — share simple adventures that are funny, wise, and full of heart."},
+{t:"Strega Nona",a:"Tomie dePaola",g:"fantasy",s:"When Big Anthony borrows Strega Nona's magic pasta pot and forgets how to stop it, the whole town is buried in spaghetti!"},
+{t:"Giraffes Can't Dance",a:"Giles Andreae",g:"animals",s:"Gerald the giraffe can't dance like the other animals — until he hears his own special music. A story about finding your own rhythm."},
+{t:"Let's Go Hugo",a:"Angela Dominguez",g:"animals",s:"Hugo the dog is nervous about everything, but with a little courage (and a friend) he discovers the world isn't so scary after all."},
+{t:"Did I Ever Tell You How Lucky You Are?",a:"Dr. Seuss",g:"funny",s:"A wise old man shows a boy just how lucky he really is by describing all the crazy, unlucky situations other people are stuck in."},
+{t:"Green Eggs and Ham",a:"Dr. Seuss",g:"funny",s:"Sam-I-Am won't give up trying to get his friend to taste green eggs and ham — one of the most beloved, silliest books ever written."},
+{t:"Olivia",a:"Ian Falconer",g:"funny",s:"Olivia is a little pig with big ideas who wears everyone out — including herself. Stylish, confident, and impossible not to love."},
+{t:"The Napping House",a:"Audrey Wood",g:"funny",s:"Everyone in the house is napping in a big cozy pile — until one tiny flea wakes everybody up in a chain reaction of chaos."},
+{t:"Miss Spider's Tea Party",a:"David Kirk",g:"animals",s:"Miss Spider just wants to invite the bugs over for tea, but everyone is afraid she wants to eat them! A sweet story about making friends."},
+{t:"The Snowy Nap",a:"Jan Brett",g:"animals",s:"Hedgie the hedgehog wants to stay awake to see snow for the first time — but hibernation keeps calling him back to sleep."},
+{t:"Hello Lighthouse",a:"Sophie Blackall",g:"adventure",s:"A lighthouse keeper and his family live on a tiny island, tending the light through storms, seasons, and the changing world around them."},
+{t:"Rosie Revere, Engineer",a:"Andrea Beaty",g:"science",s:"Rosie is a quiet girl with big engineering dreams who learns that the only real failure is giving up. A story about invention and perseverance.",pp:true},
+{t:"Frederick",a:"Leo Lionni",g:"animals",s:"While the other mice gather food for winter, Frederick gathers sunshine, colors, and words — and when winter comes, his gifts warm everyone."},
+{t:"Giant of Jum",a:"Elli Woollard",g:"fantasy",s:"A tiny girl outsmarts a hungry giant with cleverness and courage — a rollicking rhyming adventure full of twists."},
+{t:"The Circus Ship",a:"Chris Van Dusen",g:"adventure",s:"When a circus ship sinks off the coast of Maine, the animals swim to a small island and become part of the town."},
+{t:"There's a Dinosaur on the 13th Floor",a:"Wade Bradford",g:"funny",s:"A boy in a hotel keeps taking the elevator to different floors, meeting wackier and wackier guests — until he reaches the dinosaur at the top."},
+{t:"The Lion Inside",a:"Rachel Bright",g:"animals",s:"A tiny mouse wants to learn to roar, so he climbs a tall cliff to ask the lion — and discovers that even small creatures can be brave."},
+{t:"Ol' Mama Squirrel",a:"David Ezra Stein",g:"animals",s:"Mama Squirrel protects her babies from every threat — hawks, snakes, bears — with fierce love and zero fear."},
+{t:"The Day the Crayons Quit",a:"Drew Daywalt",g:"funny",s:"Duncan's crayons have had it — they write him letters complaining about their jobs. Red is overworked, Beige feels ignored, and Peach is embarrassed about losing his wrapper."},
+{t:"I Want My Hat Back",a:"Jon Klassen",g:"funny",s:"Bear has lost his hat. He asks all the animals if they've seen it. One of them is definitely lying. A perfectly deadpan, perfectly funny book."},
+{t:"Because of an Acorn",a:"Lola M. Schaefer",g:"nature",s:"A tiny acorn grows into a tree that shelters birds, grows seeds, and feeds a forest — a beautiful chain of how nature connects."},
+{t:"Thank You, Omu",a:"Oge Mora",g:"family",s:"Omu makes a delicious pot of stew and shares it with everyone who comes to her door — until the pot is empty. But kindness comes back around."},
+{t:"Mother Bruce",a:"Ryan T. Higgins",g:"funny",s:"Bruce is a grumpy bear who accidentally becomes mother to four baby geese. He does not want to be their mom. They don't care."},
+{t:"A Piglet Named Mercy",a:"Kate DiCamillo",g:"funny",s:"The origin story of Mercy Watson — how a tiny piglet finds her way to the loving (and very surprised) Watson family."},
+{t:"The Duckling Gets a Cookie!?",a:"Mo Willems",g:"funny",s:"The Pigeon is outraged that the duckling got a cookie just by asking nicely. A hilarious lesson in manners (sort of)."},
+{t:"The Kissing Hand",a:"Audrey Penn",g:"family",s:"Chester the raccoon is scared about starting school, so his mama gives him a secret kiss on his palm to keep him brave all day."},
+{t:"The Very Last Castle",a:"Travis Jonker",g:"adventure",s:"Everyone in town is afraid of the castle — except one curious girl who decides to knock on the door and discover what's really inside."},
+{t:"The Wolf, the Duck & the Mouse",a:"Mac Barnett",g:"funny",s:"A mouse is swallowed by a wolf — and discovers that the duck who was eaten earlier has made a very comfortable home in there."},
+{t:"Arlo the Lion Who Couldn't Sleep",a:"Catherine Rayner",g:"animals",s:"Arlo tries everything to fall asleep — counting sheep, warm milk, lullabies — in this soothing, beautifully illustrated bedtime story."},
+{t:"There Might Be Lobsters",a:"Carolyn Crimi",g:"animals",s:"Suzy the dog is terrified of the beach — there might be lobsters! But with a brave new friend, she discovers the beach isn't so bad."},
+{t:"Extra Yarn",a:"Mac Barnett",g:"fantasy",s:"Annabelle finds a magic box of yarn that never runs out and knits sweaters for everyone and everything in her cold, gray town until it's bursting with color."},
+{t:"Angelina Ballerina",a:"Katherine Holabird",g:"adventure",s:"A little mouse loves to dance so much she dances everywhere — even when she should be doing other things. A charming classic about following your passion."},
+{t:"Katy and the Big Snow",a:"Virginia Lee Burton",g:"adventure",s:"Katy is a big red tractor who saves the town when the biggest snowstorm ever hits — plowing through drifts to help everyone who needs her."},
+{t:"A Kitten in Gooseberry Park",a:"Cynthia Rylant",g:"animals",s:"A calico kitten goes on a small but brave adventure in Gooseberry Park, meeting new friends and finding her way."}
+],
+
+"1st2nd":[
+{t:"Mouse and the Motorcycle",a:"Beverly Cleary",g:"adventure",s:"A brave little mouse named Ralph discovers a toy motorcycle — and finds out he can ride it! An exciting friendship with a boy at a hotel kicks off a grand adventure.",pp:true},
+{t:"Three Tales of My Father's Dragon",a:"Ruth Stiles Gannett",g:"fantasy",s:"Young Elmer Elevator runs away to Wild Island to rescue a baby dragon, armed with nothing but chewing gum, lollipops, and clever thinking."},
+{t:"Sarah, Plain and Tall",a:"Patricia MacLachlan",g:"family",s:"A woman from Maine answers an ad to come live with a frontier family. Will she stay? A quiet, beautiful story about finding home.",pp:true},
+{t:"Homer Price",a:"Robert McCloskey",g:"funny",s:"Homer lives in a small town where the wildest things keep happening — runaway doughnut machines, escaped skunks, and robberies solved by kids."},
+{t:"Charlotte's Web",a:"E.B. White",g:"animals",s:"A spider named Charlotte saves her best friend Wilbur the pig by spinning messages in her web — one of the most beloved stories ever told."},
+{t:"James and the Giant Peach",a:"Roald Dahl",g:"fantasy",s:"James escapes his horrible aunts by climbing inside a magical giant peach that rolls across the countryside and sails over the ocean, full of friendly giant insects."},
+{t:"The Whipping Boy",a:"Sid Fleischman",g:"adventure",s:"A spoiled prince and his whipping boy run away together and must outsmart dangerous outlaws — and learn they need each other more than they thought."},
+{t:"Annie Henry",a:"Susan Olasky",g:"history",s:"Based on the real childhood of Patrick Henry's daughter, Annie has adventures on the Virginia frontier during the years leading up to the American Revolution."},
+{t:"The Vanderbeekers",a:"Karina Yan Glaser",g:"family",s:"Five kids in a Harlem brownstone have just eleven days to convince their grumpy landlord to let them stay — using kindness, creativity, and a lot of heart."},
+{t:"The Indian in the Cupboard",a:"Lynne Reid Banks",g:"fantasy",s:"A boy puts a toy Indian in an old cupboard and discovers it's come alive — a tiny, real person with his own life, feelings, and history.",pp:true},
+{t:"The Lighthouse Family",a:"Cynthia Rylant",g:"animals",s:"A cat, a dog, and three adopted mouse children live together in a lighthouse, having gentle seaside adventures full of warmth and wonder."},
+{t:"Freckle Juice",a:"Judy Blume",g:"funny",s:"Andrew wants freckles so badly that he pays fifty cents for a secret freckle recipe — and the results are hilariously disgusting."},
+{t:"Ramona Quimby, Age 8",a:"Beverly Cleary",g:"funny",s:"Ramona is eight and has big feelings about everything — school, her sister, her dad's cooking. She's messy, lovable, and completely real."},
+{t:"Travels with My Family",a:"Mary-Louise Gay & David Homel",g:"funny",s:"A boy's family drags him on wild, unpredictable vacations to places he definitely did not choose — told with wit and a lot of complaining."},
+{t:"Mrs. Piggle-Wiggle",a:"Betty MacDonald",g:"funny",s:"Mrs. Piggle-Wiggle lives in an upside-down house and has magical cures for badly behaved children — like the won't-pick-up-toys cure and the never-want-to-go-to-bed cure.",pp:true},
+{t:"The School Mouse",a:"Dick King-Smith",g:"animals",s:"A mouse born in a school closet decides to do something no mouse has ever done — learn to read and write, one letter at a time."},
+{t:"Poppleton",a:"Cynthia Rylant",g:"animals",s:"Poppleton is a city pig who moves to a small town and makes new friends — sweet, simple stories about everyday kindness and friendship."},
+{t:"Mercy Watson",a:"Kate DiCamillo",g:"funny",s:"Mercy Watson is a pig who loves toast with a great deal of butter. Her adventures are fast, funny, and always a little bit out of control."},
+{t:"The Enormous Crocodile",a:"Roald Dahl",g:"funny",s:"A greedy crocodile comes up with secret plans to eat children for lunch — but the other animals keep ruining his schemes in the funniest ways."},
+{t:"Mouse Soup",a:"Arnold Lobel",g:"funny",s:"A mouse caught by a weasel tells four clever stories to avoid being turned into soup — a funny little book about the power of a good tale."},
+{t:"Madame Badobedah",a:"Sophie Dahl",g:"adventure",s:"Mabel is sure the mysterious guest at her family's seaside hotel is a villain. She investigates — and discovers the truth is more wonderful than she imagined."},
+{t:"Renato and the Lion",a:"Barbara DiLorenzo",g:"adventure",s:"A boy in Italy bonds with a wild lion who visits his town — a dreamlike story about courage, kindness, and unlikely friendships."},
+{t:"A Bargain for Frances",a:"Russell Hoban",g:"family",s:"Frances the badger learns about true friendship when her pal Thelma tries to trick her during a tea set trade. Smart, funny, and relatable."},
+{t:"The Lorax",a:"Dr. Seuss",g:"nature",s:"The Lorax speaks for the trees as the Once-ler chops them all down — a powerful story about caring for the natural world before it's too late.",pp:true},
+{t:"The Bear and the Piano",a:"David Litchfield",g:"animals",s:"A bear finds a piano in the forest and learns to play beautiful music. He leaves for fame and glory — but his heart stays in the woods."},
+{t:"The Library Lion",a:"Michelle Knudsen",g:"animals",s:"A lion starts visiting the library every day. He follows the rules perfectly — until someone he cares about needs his help, and rules have to be broken."},
+{t:"Fiona's Lace",a:"Patricia Polacco",g:"history",s:"An Irish family starts a new life in Chicago, and the lacework Fiona and her sister make becomes a lifeline during the Great Chicago Fire."},
+{t:"Horton Hears a Who",a:"Dr. Seuss",g:"funny",s:"Horton the elephant hears a tiny voice on a dust speck and refuses to give up protecting it — because a person's a person, no matter how small."},
+{t:"Barnum's Bones",a:"Tracey Fern",g:"science",s:"The true story of Barnum Brown, a farm boy who became the greatest dinosaur hunter who ever lived — he found the first T. rex!"},
+{t:"Mesmerized",a:"Mara Rockliff",g:"history",s:"The true story of a mysterious Frenchman who amazed all of Paris with mesmerism — and the young boy Ben Franklin who helped uncover the truth."},
+{t:"Brambly Hedge",a:"Jill Barklem",g:"animals",s:"Tiny mice live in the roots and trunks of Brambly Hedge, celebrating the seasons with feasts, weddings, and cozy adventures in stunning detail."},
+{t:"Interrupting Chicken",a:"David Ezra Stein",g:"funny",s:"Papa is trying to read bedtime stories, but the little red chicken cannot stop interrupting to warn the characters. A perfectly silly bedtime read."},
+{t:"Digging for Words",a:"Angela Burke Kunkel",g:"history",s:"The true story of José Alberto Gutiérrez, a garbage collector in Colombia who rescued thrown-away books and built a free library for his neighborhood."},
+{t:"If You Take Away the Otter",a:"Susannah Buhrman-Deever",g:"nature",s:"What happens to the ocean when the otters disappear? A beautifully illustrated look at how one animal holds an entire ecosystem together."},
+{t:"Sisters in Science",a:"Linda Elovitz Marshall",g:"science",s:"The true story of the women who worked at the Harvard Observatory, studying the stars at a time when women weren't supposed to do science."},
+{t:"Brave Irene",a:"William Steig",g:"adventure",s:"Irene's mother is too sick to deliver a duchess's dress, so brave Irene battles a terrible snowstorm to deliver it herself. A story of pure grit and love."},
+{t:"May Among the Stars",a:"Roda Ahmed",g:"science",s:"Based on the true story of Mae Jemison, who dreamed of going to space and became the first African American woman to travel there."},
+{t:"A Hat for Mrs. Goldman",a:"Michelle Edwards",g:"family",s:"Sophia watches her neighbor Mrs. Goldman knit hats for everyone in the neighborhood — and decides it's time to make something special for her."},
+{t:"Home in the Woods",a:"Eliza Wheeler",g:"history",s:"Based on a true story — a mother and her children build a new life in a tiny cabin in the woods during the Great Depression."},
+{t:"Charlotte and the Quiet Place",a:"Deborah Sosin",g:"family",s:"Charlotte feels overwhelmed by noise everywhere she goes — until she discovers that a quiet place can be found inside yourself."},
+{t:"Ordinary Mary's Extraordinary Deed",a:"Emily Pearson",g:"family",s:"Mary picks blueberries and gives them to a neighbor, starting a chain reaction of kindness that circles the entire world."},
+{t:"As Fast as Words Could Fly",a:"Pamela M. Tuck",g:"history",s:"A true story about a boy who uses his typing skills to break barriers during the civil rights era — fast fingers and a brave heart."},
+{t:"The Fabled Life of Aesop",a:"Ian Lendler",g:"history",s:"The imagined story of how Aesop — a real enslaved man in ancient Greece — may have come to create his famous fables about animals and wisdom."},
+{t:"The Secret of the Hidden Scrolls",a:"M.J. Thomas",g:"adventure",s:"Siblings Peter and Mary find ancient scrolls that transport them back to Bible times — where they witness amazing events firsthand."},
+{t:"Anna Hibiscus",a:"Atinuke",g:"family",s:"Anna Hibiscus lives in a big compound in modern-day Africa with her enormous, wonderful family — stories full of joy, mischief, and warmth."},
+{t:"McBroom's Wonderful One-Acre Farm",a:"Sid Fleischman",g:"funny",s:"The McBroom family's farm is so rich that crops grow before your eyes — leading to the tallest tales this side of anywhere."},
+{t:"Heartwood Hotel",a:"Kallie George",g:"animals",s:"A tiny mouse named Mona arrives at a cozy hotel in the woods run by a badger — and finds friends, mysteries, and a place to belong."},
+{t:"Our Friend Hedgehog",a:"Lauren Castillo",g:"animals",s:"Hedgehog wakes up after a big storm and goes searching for her best friend Mutton — a tender story about friendship and never giving up."}
+],
+
+"3rd5th":[
+{t:"Alicia Alonso Takes the Stage",a:"Rebel Girls",g:"history",s:"The true story of Cuba's greatest ballerina, who danced her way to world fame even as she lost her sight — a story of passion and never giving up."},
+{t:"Alice-All-By-Herself",a:"Elizabeth Coatsworth",g:"adventure",s:"Young Alice explores a sprawling old estate and discovers secret gardens, mysterious corners, and the magic of having a whole summer to herself."},
+{t:"Alice in Wonderland",a:"Lewis Carroll",g:"fantasy",s:"Alice tumbles down a rabbit hole into a topsy-turvy world full of talking animals, mad tea parties, and very peculiar rules. Nothing makes sense — and it's wonderful."},
+{t:"Esperanza Rising",a:"Pam Munoz Ryan",g:"history",s:"From wealthy rancher's daughter to migrant farm worker — Esperanza must learn courage and hope when her whole world is turned upside down."},
+{t:"Freddy the Detective",a:"Walter R. Brooks",g:"funny",s:"Freddy the pig decides to become a detective on the Bean farm, solving mysteries with hilarious results alongside his barnyard friends."},
+{t:"Island of the Blue Dolphins",a:"Scott O'Dell",g:"adventure",s:"Karana is left alone on a wild Pacific island and must survive for years using only her wits, courage, and the company of the animals around her."},
+{t:"Rainbow Garden",a:"Patricia St. John",g:"adventure",s:"A lonely girl sent to live with strangers in the English countryside discovers friendship, beauty in nature, and something worth believing in."},
+{t:"Sleeping Beauty Daughters",a:"Diane Zahler",g:"fantasy",s:"The daughters of Sleeping Beauty have inherited a dangerous curse — and they must race to break it before it steals everything they love."},
+{t:"The Cricket in Times Square",a:"George Selden",g:"animals",s:"A Connecticut cricket named Chester winds up in a New York City subway station, where he befriends a mouse, a cat, and a boy — and discovers his musical gift."},
+{t:"The Mail Wagon Mystery",a:"Mary Justus",g:"adventure",s:"When the mountain mail delivery goes missing, a resourceful girl takes matters into her own hands to crack the case in her small Appalachian community."},
+{t:"The Ordinary Princess",a:"M.M. Kayne",g:"fantasy",s:"Princess Amy is cursed to be completely ordinary — plain, freckled, and sensible. She runs away and discovers that ordinary might be the best thing she could be."},
+{t:"The Story of Louis Pasteur",a:"Alida Sims Malkus",g:"history",s:"The fascinating true story of how a French scientist's curiosity and stubbornness led to discoveries that saved millions of lives."},
+{t:"The Trumpet of the Swan",a:"E.B. White",g:"animals",s:"Louis is a trumpeter swan born without a voice. With a little help from a boy named Sam and a real brass trumpet, he sets out to make his mark on the world."},
+{t:"Phoebe the Spy",a:"Judith Berry Griffin",g:"history",s:"Set during the American Revolution, Phoebe uncovers a real plot to assassinate George Washington and must find a way to warn him in time.",pp:true},
+{t:"A Place to Hang the Moon",a:"Kate Albus",g:"history",s:"Three orphaned siblings evacuated from London during WWII search for a permanent home among strangers — and find unexpected family in a library and its books."},
+{t:"The Candymakers",a:"Wendy Mass",g:"adventure",s:"Four kids compete to create the next great candy at the Life Is Sweet factory. Each has a secret. A deliciously surprising story told from four different points of view."},
+{t:"A Long Way from Chicago",a:"Richard Peck",g:"funny",s:"Every summer, Joey and his sister visit their wildly unpredictable Grandma Dowdel in small-town Illinois, where something outrageous is always about to happen."},
+{t:"Black Beauty",a:"Anna Sewell",g:"animals",s:"A horse named Black Beauty tells the story of his life, from happy meadows to hard work in the city — a moving story about kindness and cruelty told from a horse's perspective."},
+{t:"The False Prince",a:"Jennifer A. Nielsen",g:"adventure",s:"An orphan boy is chosen for a dangerous scheme to impersonate a long-lost prince. But Sage has his own plans — and secrets of his own.",pp:true},
+{t:"The Bark of the Bog Owl",a:"Jonathan Rogers",g:"fantasy",s:"In a world like ancient Israel, young Aidan longs to be a warrior. But his destiny leads somewhere completely unexpected — and far more important."},
+{t:"The Penderwicks",a:"Jeanne Birdsall",g:"adventure",s:"Four sisters and their father spend a summer in a cottage by a beautiful estate, making friends, getting into scrapes, and creating memories that last forever."},
+{t:"The Bookwanderers",a:"Anna James",g:"fantasy",s:"Tilly discovers she can literally walk into the pages of her favorite books and meet the characters. But something is going wrong in the world of stories."},
+{t:"A Wrinkle in Time",a:"Madeleine L'Engle",g:"fantasy",s:"Meg Murry travels across the universe through a wrinkle in time to rescue her missing father — fighting darkness and discovering that love is the most powerful force in the universe."},
+{t:"The Mysterious Benedict Society",a:"Trenton Lee Stewart",g:"adventure",s:"Four gifted orphans pass a series of bizarre tests to join a secret mission — only the most creative, brave, and kind can outwit the villain threatening the world.",pp:true},
+{t:"Houdini + Me",a:"Dan Gutman",g:"adventure",s:"A boy discovers magical postcards that let him communicate across time with the great Harry Houdini himself — leading to a thrilling mystery."},
+{t:"Holes",a:"Louis Sachar",g:"adventure",s:"Stanley is sent to a boys' detention camp in the desert where everyone must dig a hole every day. There's a reason they're digging — and it connects to a very old story.",pp:true},
+{t:"Swiss Family Robinson",a:"Johann D. Wyss",g:"adventure",s:"A family shipwrecked on a tropical island builds a life full of clever inventions, wild animals, and surprising discoveries — the original survival adventure story."},
+{t:"Heidi",a:"Johanna Spyri",g:"adventure",s:"Little Heidi is sent to live with her grumpy grandfather high in the Swiss Alps. The mountain air, goats, and Heidi herself slowly transform everything around her."},
+{t:"Pippi Longstocking",a:"Astrid Lindgren",g:"funny",s:"Pippi lives alone (with a horse and a monkey) and does exactly as she pleases — she's the strongest girl in the world, and adventures happen wherever she goes."},
+{t:"The Twenty-One Balloons",a:"William Pene du Bois",g:"adventure",s:"Professor Sherman sets off around the world in a hot air balloon and lands on the secret island of Krakatoa, home to a fantastically inventive civilization."},
+{t:"A Little Princess",a:"Frances Hodgson Burnett",g:"adventure",s:"When Sara Crewe's father dies, she goes from the most pampered girl at her school to a servant — but she keeps her imagination and kindness no matter what."},
+{t:"Johnny Tremain",a:"Esther Forbes",g:"history",s:"A talented silversmith's apprentice in Revolutionary Boston joins the Sons of Liberty and finds himself at the heart of the events that sparked the American Revolution."},
+{t:"Mary Poppins",a:"P.L. Travers",g:"fantasy",s:"A magical nanny arrives on the east wind and takes the Banks children on extraordinary adventures — sliding up banisters, visiting chalk-drawing worlds, and much more."},
+{t:"The Invention of Hugo Cabret",a:"Brian Selznick",g:"adventure",s:"An orphan who secretly lives inside the walls of a Paris train station tends the clocks and discovers a mystery connected to the earliest days of movies. Half told in stunning pictures."},
+{t:"Momo",a:"Michael Ende",g:"fantasy",s:"A little girl named Momo discovers that mysterious grey men are stealing people's time. She must find a way to get it back — in this unusual and magical tale from Germany."},
+{t:"Ella Enchanted",a:"Gail Carson Levine",g:"fantasy",s:"Ella was given the gift of obedience at birth — which means she must do whatever anyone tells her. She sets out to break the curse before it destroys everything she loves.",pp:true},
+{t:"The Weaver",a:"Kai Strand",g:"fantasy",s:"A girl with the power to weave the future must decide what kind of world she wants to create — a story about choices, responsibility, and the threads that connect us."},
+{t:"Howl's Moving Castle",a:"Diana Wynne Jones",g:"fantasy",s:"Sophie is turned into an old woman by a witch and takes refuge in a wizard's moving castle. The wizard Howl is vain and dramatic — and nothing is as it first appears."},
+{t:"Misty of Chincoteague",a:"Marguerite Henry",g:"animals",s:"Two children on a Virginia island dream of capturing a wild pony from the famous Pony Penning roundup — a classic horse story full of heart."},
+{t:"Mr. Lemoncello's Great Library Race",a:"Chris Grabenstein",g:"adventure",s:"The world's greatest game maker challenges kids to a race using the most amazing library ever built — full of puzzles, clues, and surprises around every corner."},
+{t:"The Green Ember",a:"S.D. Smith",g:"fantasy",s:"Two young rabbits flee their home and discover they are part of a much bigger story — a tale of honor, bravery, and a kingdom worth fighting for."},
+{t:"The Unlikely Tale of Chase & Finnegan",a:"Jasmine Warga",g:"adventure",s:"An unlikely duo — a boy and his curious dog — set off on a neighborhood adventure that becomes much bigger and more meaningful than either of them expected."},
+{t:"Cheaper by the Dozen",a:"Frank Gilbreth",g:"funny",s:"The true (and hilariously chaotic) story of growing up in a family of twelve children run by efficiency-expert parents with very big ideas about how to organize life."},
+{t:"The Moffats",a:"Eleanor Estes",g:"funny",s:"Four siblings in a small Connecticut town in the 1910s navigate school, neighbors, and family life with warmth, humor, and a lot of imagination."},
+{t:"The Vanderbeekers to the Rescue",a:"Karina Yan Glaser",g:"adventure",s:"The five Vanderbeeker kids hatch a plan to save their beloved Harlem brownstone and their community — because family means showing up for the people you love."},
+{t:"The Beatryce Prophecy",a:"Kate DiCamillo",g:"fantasy",s:"A girl who can read and write in a time when girls weren't supposed to is discovered in a monastery — and a prophecy says she will unseat a king."},
+{t:"Pocket Bear",a:"Katherine Applegate",g:"animals",s:"A tiny bear with big feelings learns about courage, belonging, and what it truly means to be brave — a tender story for big-hearted readers."},
+{t:"Sideways Stories from Wayside School",a:"Louis Sachar",g:"funny",s:"Wayside School was built sideways by mistake — so all 30 classrooms are stacked up, one on top of another. The students and teachers are just as wonderfully strange as the building."},
+{t:"The Phantom Tollbooth",a:"Norton Juster",g:"fantasy",s:"Milo drives through a magic tollbooth into a land where words and numbers are at war — one of the cleverest, funniest, most inventive adventures ever written."},
+{t:"The Wind in the Willows",a:"Kenneth Grahame",g:"animals",s:"Mole, Ratty, Badger, and the irrepressible Toad share adventures along the riverbank — a timeless tale of friendship, home, and one very reckless automobile."},
+{t:"Little House on the Prairie",a:"Laura Ingalls Wilder",g:"history",s:"Laura and her family pack up and travel across the open prairie to build a new home from scratch — a true story of pioneer life, courage, and family."},
+{t:"The Chocolate Touch",a:"Patrick Skene Catling",g:"fantasy",s:"John Midas loves chocolate so much that everything he touches turns to chocolate — which sounds great until it really, really isn't."},
+{t:"Encyclopedia Brown",a:"Donald J. Sobol",g:"adventure",s:"Ten-year-old Leroy Brown solves mysteries that stump even his police-chief dad. Can you crack the case before Encyclopedia does?"},
+{t:"Mr. Popper's Penguins",a:"Richard & Florence Atwater",g:"funny",s:"Mr. Popper is a mild house painter who receives a penguin in the mail — and before long, he has twelve penguins and a traveling show."},
+{t:"Charlie and the Chocolate Factory",a:"Roald Dahl",g:"fantasy",s:"Charlie Bucket wins a golden ticket to tour Willy Wonka's mysterious, magnificent, and slightly dangerous chocolate factory."},
+{t:"Stuart Little",a:"E.B. White",g:"adventure",s:"Stuart is a mouse born into a human family in New York City. He's small but brave, and sets out on a journey to find his dearest friend."},
+{t:"National Park Mystery Series",a:"Aaron Johnson",g:"adventure",s:"A family travels to America's national parks and stumbles into mysteries wherever they go — adventure, nature, and clue-cracking in the great outdoors."},
+{t:"Mrs. Frisby and the Rats of NIMH",a:"Robert C. O'Brien",g:"fantasy",s:"A mother mouse must save her family and discovers a colony of super-intelligent rats with an incredible secret — one of the greatest animal fantasies ever written."},
+{t:"Owls in the Family",a:"Farley Mowat",g:"animals",s:"A boy in Saskatchewan adopts two wild owls who cause absolute chaos — a funny and true story about growing up with the wildest possible pets."}
+]
+};
+
+let currentGrade='prek';
+let activeFilter='all';
+let picked=new Set();
+
+function setGrade(g){
+  currentGrade=g;
+  activeFilter='all';
+  document.getElementById('search').value='';
+  document.querySelectorAll('.gtab').forEach((t,i)=>{
+    t.classList.toggle('active',['prek','1st2nd','3rd5th'][i]===g);
+  });
+  buildFilters();
+  render();
+}
+
+function buildFilters(){
+  const books=DATA[currentGrade];
+  const genres=new Set();
+  books.forEach(b=>{if(!b.pp)genres.add(b.g)});
+  const pills=document.getElementById('filter-pills');
+  pills.innerHTML='';
+  const allBtn=document.createElement('button');
+  allBtn.className='filter-pill active';
+  allBtn.textContent='All';
+  allBtn.onclick=()=>{activeFilter='all';updateFilters();render()};
+  pills.appendChild(allBtn);
+
+  const ppBtn=document.createElement('button');
+  ppBtn.className='filter-pill';
+  ppBtn.textContent="Principal's picks";
+  ppBtn.onclick=()=>{activeFilter='pp';updateFilters();render()};
+  pills.appendChild(ppBtn);
+
+  const order=['adventure','fantasy','animals','history','funny','family','nature','science','classic'];
+  order.forEach(g=>{
+    if(!genres.has(g))return;
+    const btn=document.createElement('button');
+    btn.className='filter-pill';
+    btn.textContent=g.charAt(0).toUpperCase()+g.slice(1);
+    btn.onclick=()=>{activeFilter=g;updateFilters();render()};
+    pills.appendChild(btn);
+  });
+}
+
+function updateFilters(){
+  document.querySelectorAll('.filter-pill').forEach(p=>{
+    const label=p.textContent.toLowerCase();
+    const isActive=(activeFilter==='all'&&label==='all')||(activeFilter==='pp'&&label==="principal's picks")||(label===activeFilter);
+    p.classList.toggle('active',isActive);
+  });
+}
+
+function render(){
+  const books=DATA[currentGrade];
+  const query=document.getElementById('search').value.toLowerCase();
+  const ppSection=document.getElementById('principal-section');
+  const ppGrid=document.getElementById('pp-grid');
+  const grid=document.getElementById('book-grid');
+  const empty=document.getElementById('empty-state');
+
+  const ppBooks=books.filter(b=>b.pp);
+  const showPP=activeFilter==='all'||activeFilter==='pp';
+
+  if(showPP&&ppBooks.length>0&&!query){
+    ppSection.style.display='';
+    ppGrid.innerHTML='';
+    ppBooks.forEach(b=>{
+      const key=currentGrade+':'+b.t;
+      const isPicked=picked.has(key);
+      const card=document.createElement('div');
+      card.className='pp-card'+(isPicked?' picked':'');
+      card.innerHTML=`<div class="card-title">${b.t}</div><div class="card-author">by ${b.a}</div><div class="card-summary">${b.s}</div><div class="pick-check"><i class="ti ti-check" aria-hidden="true"></i> Added to picks</div>`;
+      card.onclick=()=>{togglePick(key);render()};
+      ppGrid.appendChild(card);
+    });
+  } else {
+    ppSection.style.display='none';
+  }
+
+  grid.innerHTML='';
+  let count=0;
+  books.forEach(b=>{
+    if(activeFilter==='pp'&&!b.pp)return;
+    if(activeFilter!=='all'&&activeFilter!=='pp'&&b.g!==activeFilter)return;
+    if(query&&!b.t.toLowerCase().includes(query)&&!b.a.toLowerCase().includes(query)&&!b.s.toLowerCase().includes(query))return;
+    count++;
+    const key=currentGrade+':'+b.t;
+    const isPicked=picked.has(key);
+    const card=document.createElement('div');
+    card.className='book-card genre-'+b.g+(isPicked?' picked':'');
+    card.innerHTML=`<div class="card-title">${b.t}${b.pp?' <i class="ti ti-star" style="font-size:14px;color:#BA7517;vertical-align:-1px" aria-hidden="true"></i>':''}</div><div class="card-author">by ${b.a}</div><span class="genre-tag">${b.g}</span><div class="card-summary">${b.s}</div><div class="pick-check"><i class="ti ti-check" aria-hidden="true"></i> Added to picks</div>`;
+    card.onclick=()=>{togglePick(key);render()};
+    grid.appendChild(card);
+  });
+
+  document.getElementById('book-count').textContent=count+' book'+(count!==1?'s':'');
+  empty.style.display=count===0?'':'none';
+  updateFooter();
+}
+
+function togglePick(key){
+  if(picked.has(key))picked.delete(key);
+  else picked.add(key);
+}
+
+function updateFooter(){
+  const footer=document.getElementById('picks-footer');
+  if(picked.size===0){footer.classList.remove('show');return}
+  footer.classList.add('show');
+  document.getElementById('pick-count').textContent=picked.size;
+  const names=[...picked].map(k=>k.split(':').slice(1).join(':')).join(', ');
+  document.getElementById('pick-names').textContent=names;
+}
+
+function printPicks(){
+  const titles=[...picked].map(k=>{
+    const grade=k.split(':')[0];
+    const title=k.split(':').slice(1).join(':');
+    const gradeLabel={prek:'Pre-K/K','1st2nd':'1st-2nd','3rd5th':'3rd-5th'}[grade];
+    const allBooks=[...DATA.prek,...DATA['1st2nd'],...DATA['3rd5th']];
+    const book=allBooks.find(b=>b.t===title);
+    return gradeLabel+': '+title+(book?' by '+book.a:'');
+  });
+  const w=window.open('','_blank');
+  w.document.write('<html><head><title>My Summer Reading Picks</title><style>body{font-family:Georgia,serif;max-width:600px;margin:40px auto;padding:20px}h1{font-size:24px;margin-bottom:4px}p.sub{color:#888;margin-bottom:24px}li{font-size:16px;margin-bottom:8px;line-height:1.5}</style></head><body>');
+  w.document.write('<h1>My Summer Reading Picks</h1><p class="sub">Summer 2026</p><ol>');
+  titles.forEach(t=>w.document.write('<li>'+t+'</li>'));
+  w.document.write('</ol></body></html>');
+  w.document.close();
+  w.print();
+}
+
+buildFilters();
+render();
+</script>
+</body>
+</html>
